@@ -36,16 +36,16 @@ void AMainCharacter::BeginPlay()
 	if (SpringArmComponent != nullptr)
 	{
 		//Set Location and Rotation
-		SpringArmComponent->SetRelativeLocation(FVector(0.0f, 30.0f, 100.0f));
+		SpringArmComponent->SetRelativeLocation(FVector(0.0f, CameraOffset.Y, CameraOffset.Z));
 		SpringArmComponent->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 
 		// Set How far away from character
-		SpringArmComponent->TargetArmLength = 350.0f;
+		SpringArmComponent->TargetArmLength = CameraOffset.X;
 
 		// Set camera lag behaviour
 		SpringArmComponent->bEnableCameraLag = true;
 		SpringArmComponent->bUsePawnControlRotation = true;
-		SpringArmComponent->CameraLagSpeed = 20.0f;
+		SpringArmComponent->CameraLagSpeed = CameraLagSpeed;
 	}
 
 	if (TPSCameraComponent != nullptr)

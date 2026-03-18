@@ -39,6 +39,12 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	UCameraComponent* TPSCameraComponent;
 
+	UPROPERTY(EditAnywhere, Category = "Camera")
+	FVector CameraOffset{ 350.0f, 30.0f, 100.0f };
+
+	UPROPERTY(EditAnywhere, Category = "Camera")
+	float CameraLagSpeed = 20.0f;
+
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComponent;
 
