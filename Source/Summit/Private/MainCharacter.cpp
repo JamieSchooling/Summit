@@ -2,6 +2,7 @@
 
 
 #include "MainCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -23,6 +24,8 @@ AMainCharacter::AMainCharacter()
 
 	//Attach CameraComponent as a child of Spring Arm
 	TPSCameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
+
+	CharacterMovement = GetCharacterMovement();
 }
 
 // Called when the game starts or when spawned
@@ -33,11 +36,11 @@ void AMainCharacter::BeginPlay()
 	if (SpringArmComponent != nullptr)
 	{
 		//Set Location and Rotation
-		SpringArmComponent->SetRelativeLocation(FVector(0.0f, 70.0f, 100.0f));
+		SpringArmComponent->SetRelativeLocation(FVector(0.0f, 30.0f, 100.0f));
 		SpringArmComponent->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 
 		// Set How far away from character
-		SpringArmComponent->TargetArmLength = 250.0f;
+		SpringArmComponent->TargetArmLength = 350.0f;
 
 		// Set camera lag behaviour
 		SpringArmComponent->bEnableCameraLag = true;
@@ -66,6 +69,7 @@ void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	CharacterMovement->bUseControllerDesiredRotation = false;
 }
 
 // Called to bind functionality to input
@@ -91,6 +95,10 @@ void AMainCharacter::Move(const FInputActionValue& Value)
 	FVector2D MovementVector = Value.Get<FVector2D>();
 	if (Controller != nullptr)
 	{
+		if (MovementVector.SquaredLength() > 0)
+		{
+			CharacterMovement->bUseControllerDesiredRotation = true;
+		}
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -105,7 +113,7 @@ void AMainCharacter::Move(const FInputActionValue& Value)
 }
 
 void AMainCharacter::Look(const FInputActionValue& Value)
-{
+{	
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 	if (Controller != nullptr)
 	{

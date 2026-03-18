@@ -62,4 +62,7 @@ public:
 	/** Called for Jumping input */
 	void Jumping();
 
+private:
+	TObjectPtr<UCharacterMovementComponent> CharacterMovement;
+
 };
