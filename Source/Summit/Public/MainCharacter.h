@@ -10,6 +10,8 @@
 #include "InputActionValue.h"
 #include "MainCharacter.generated.h"
 
+class AGun;
+
 UCLASS()
 class SUMMIT_API AMainCharacter : public ACharacter
 {
@@ -47,6 +49,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComponent;
+
+	UPROPERTY(EditDefaultsOnly) // Not editable in run time
+	TSubclassOf<AGun> GunClass;
+
+	UPROPERTY()
+	AGun* Gun;
 
 protected:
 	// Called when the game starts or when spawned

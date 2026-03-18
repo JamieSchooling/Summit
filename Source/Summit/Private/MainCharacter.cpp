@@ -5,6 +5,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
+#include "Gun.h"
 #include "EnhancedInputSubsystems.h"
 
 // Sets default values
@@ -53,6 +54,12 @@ void AMainCharacter::BeginPlay()
 		// Camera pawn rotation must be enabled to allow player to move camera
 		TPSCameraComponent->bUsePawnControlRotation = true;
 	}
+
+	//Gun Code
+	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+	Gun->AttachToComponent(GetMesh(),
+		FAttachmentTransformRules::KeepRelativeTransform, TEXT("GunSocket"));
+	Gun->SetOwner(this);
 
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
