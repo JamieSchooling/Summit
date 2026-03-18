@@ -53,6 +53,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	UFUNCTION(BlueprintCallable)
+	bool IsJumping();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -68,7 +71,9 @@ public:
 	/** Called for Jumping input */
 	void Jumping();
 
+	virtual void Landed(const FHitResult& Hit) override;
+
 private:
 	TObjectPtr<UCharacterMovementComponent> CharacterMovement;
-
+	bool bIsJumping = false;
 };

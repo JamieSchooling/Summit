@@ -64,6 +64,11 @@ void AMainCharacter::BeginPlay()
 	}
 }
 
+bool AMainCharacter::IsJumping()
+{
+	return bIsJumping;
+}
+
 // Called every frame
 void AMainCharacter::Tick(float DeltaTime)
 {
@@ -126,5 +131,13 @@ void AMainCharacter::Look(const FInputActionValue& Value)
 void AMainCharacter::Jumping()
 {
 	Jump();
+	bIsJumping = true;
 }
+
+void AMainCharacter::Landed(const FHitResult& Hit)
+{
+	Super::Landed(Hit);
+	bIsJumping = false;
+}
+
 
