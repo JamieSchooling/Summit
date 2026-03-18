@@ -3,7 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "InputActionValue.h"
 #include "MainCharacter.generated.h"
 
@@ -31,6 +34,13 @@ public:
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* LookAction;
+
+	// TPS camera
+	UPROPERTY(VisibleAnywhere, Category = "Camera")
+	UCameraComponent* TPSCameraComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* SpringArmComponent;
 
 protected:
 	// Called when the game starts or when spawned

@@ -12,6 +12,17 @@ AMainCharacter::AMainCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Create a Spring Arm Component
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+
+	//Spring Arm Component is attached to Mesh
+	SpringArmComponent->SetupAttachment(CastChecked<USceneComponent, UCapsuleComponent>(GetCapsuleComponent()));
+
+	// Create a Third person camera component.
+	TPSCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("ThirdPersonCamera"));
+
+	//Attach CameraComponent as a child of Spring Arm
+	TPSCameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
 }
 
 // Called when the game starts or when spawned
@@ -19,6 +30,27 @@ void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (SpringArmComponent != nullptr)
+	{
+		//Set Location and Rotation
+		SpringArmComponent->SetRelativeLocation(FVector(0.0f, 70.0f, 100.0f));
+		SpringArmComponent->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+
+		// Set How far away from character
+		SpringArmComponent->TargetArmLength = 250.0f;
+
+		// Set camera lag behaviour
+		SpringArmComponent->bEnableCameraLag = true;
+		SpringArmComponent->bUsePawnControlRotation = true;
+		SpringArmComponent->CameraLagSpeed = 20.0f;
+	}
+
+	if (TPSCameraComponent != nullptr)
+	{
+		// Camera pawn rotation must be enabled to allow player to move camera
+		TPSCameraComponent->bUsePawnControlRotation = true;
+	}
+
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
