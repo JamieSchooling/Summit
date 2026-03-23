@@ -14,6 +14,9 @@ AGun::AGun()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(Root);
+
+	SecondHandPin = CreateDefaultSubobject<USceneComponent>(TEXT("SecondHandPin"));
+	SecondHandPin->SetupAttachment(Root);
 }
 
 // Called when the game starts or when spawned

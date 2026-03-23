@@ -13,7 +13,7 @@ class SUMMIT_API AGun : public AActor
 	
 public:	
 	// Sets default values for this actor's properties
-	AGun();
+	AGun(); 
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,6 +22,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	USceneComponent* SecondHandPin;
 
 private:
 	UPROPERTY(VisibleAnywhere)

@@ -53,7 +53,7 @@ public:
 	UPROPERTY(EditDefaultsOnly) // Not editable in run time
 	TSubclassOf<AGun> GunClass;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
 	AGun* Gun;
 
 protected:
