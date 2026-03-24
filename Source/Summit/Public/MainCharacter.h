@@ -37,6 +37,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* LookAction;
 
+	/** Look Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* ShootAction;
+
 	// TPS camera
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	UCameraComponent* TPSCameraComponent;
@@ -55,6 +59,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
 	AGun* Gun;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	TEnumAsByte<ECollisionChannel> TraceChannelProperty = ECC_Pawn;
 
 protected:
 	// Called when the game starts or when spawned
@@ -78,6 +85,9 @@ public:
 
 	/** Called for Jumping input */
 	void Jumping();
+
+	/** Called for Shoot input */
+	void Shoot();
 
 	virtual void Landed(const FHitResult& Hit) override;
 

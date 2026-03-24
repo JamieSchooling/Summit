@@ -98,6 +98,8 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainCharacter::Move);
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
+		//Shooting
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &AMainCharacter::Shoot);
 	}
 
 }
@@ -139,6 +141,33 @@ void AMainCharacter::Jumping()
 {
 	Jump();
 	bIsJumping = true;
+}
+
+void AMainCharacter::Shoot()
+{
+	FHitResult Hit;
+
+	FVector TraceBegin = TPSCameraComponent->GetComponentLocation();
+	FVector TraceEnd = TPSCameraComponent->GetComponentLocation() + TPSCameraComponent->GetForwardVector() * 10000.0f;
+
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
+
+	GetWorld()->LineTraceSingleByChannel(Hit, TraceBegin, TraceEnd, TraceChannelProperty, QueryParams);
+
+	
+	DrawDebugLine(GetWorld(), TraceBegin, Hit.bBlockingHit ? Hit.ImpactPoint : TraceEnd, Hit.bBlockingHit ? FColor::Blue : FColor::Red, false, 5.1f, 0, 1.0f);
+
+	if (!Hit.bBlockingHit || !IsValid(Hit.GetActor()))
+	{
+		UE_LOG(LogTemp, Log, TEXT("No Actors Hit"));
+		return;
+	}
+
+	if (AMainCharacter* other = Cast<AMainCharacter>(Hit.GetActor()))
+	{
+		UE_LOG(LogTemp, Log, TEXT("Trace hit player: %s"), *Hit.GetActor()->GetName());
+	}
 }
 
 void AMainCharacter::Landed(const FHitResult& Hit)
