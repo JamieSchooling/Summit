@@ -8,11 +8,14 @@
 #include "Gun.h"
 #include "EnhancedInputSubsystems.h"
 
+#include "Net/UnrealNetwork.h"
+
 // Sets default values
 AMainCharacter::AMainCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
 
 	// Create a Spring Arm Component
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
@@ -173,7 +176,15 @@ void AMainCharacter::Shoot()
 void AMainCharacter::Landed(const FHitResult& Hit)
 {
 	Super::Landed(Hit);
+
 	bIsJumping = false;
+}
+
+void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AMainCharacter, bIsJumping);
 }
 
 

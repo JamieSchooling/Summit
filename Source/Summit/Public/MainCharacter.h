@@ -90,8 +90,10 @@ public:
 	void Shoot();
 
 	virtual void Landed(const FHitResult& Hit) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 private:
 	TObjectPtr<UCharacterMovementComponent> CharacterMovement;
+	UPROPERTY(Replicated)
 	bool bIsJumping = false;
 };
