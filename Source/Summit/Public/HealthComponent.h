@@ -29,7 +29,8 @@ public:
 
 	float GetMaxHealth() const;
 
-	void UpdateHealth(float deltaHealth);
+	UFUNCTION(Server, Reliable)
+	void UpdateHealthRPC(float deltaHealth);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

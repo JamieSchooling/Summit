@@ -19,7 +19,7 @@ float UHealthComponent::GetMaxHealth() const
 	return MaxHealth;
 }
 
-void UHealthComponent::UpdateHealth(float deltaHealth)
+void UHealthComponent::UpdateHealthRPC_Implementation(float deltaHealth)
 {
 	Health += deltaHealth;
 

@@ -187,7 +187,7 @@ void AMainCharacter::ShootRPC_Implementation()
 	{
 		UE_LOG(LogTemp, Log, TEXT("Trace hit player: %s"), *Hit.GetActor()->GetName());
 		DrawDebugLine(GetWorld(), TraceBegin, Hit.ImpactPoint, FColor::Blue, false, 5.1f, 0, 1.0f);
-		other->HealthComponent->UpdateHealth(-Gun->DamageAmount);
+		other->HealthComponent->UpdateHealthRPC(-Gun->DamageAmount);
 	}
 	else
 	{
