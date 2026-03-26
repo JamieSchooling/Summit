@@ -26,6 +26,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	USceneComponent* SecondHandPin;
 
+	UPROPERTY(EditAnywhere)
+	float DamageAmount = 10.0f;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;

@@ -11,6 +11,7 @@
 #include "MainCharacter.generated.h"
 
 class AGun;
+class UHealthComponent;
 
 UCLASS()
 class SUMMIT_API AMainCharacter : public ACharacter
@@ -54,6 +55,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComponent;
 
+	UPROPERTY(VisibleAnywhere)
+	UHealthComponent* HealthComponent;
+
 	UPROPERTY(EditDefaultsOnly) // Not editable in run time
 	TSubclassOf<AGun> GunClass;
 
@@ -66,6 +70,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void BeginDestroy() override;
 
 public:	
 	UFUNCTION(BlueprintCallable)
@@ -88,6 +93,10 @@ public:
 
 	/** Called for Shoot input */
 	void Shoot();
+
+	/** Performs shoot on the server */
+	UFUNCTION(Server, Reliable)
+	void ShootRPC();
 
 	virtual void Landed(const FHitResult& Hit) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

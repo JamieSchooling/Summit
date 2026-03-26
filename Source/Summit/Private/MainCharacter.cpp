@@ -6,9 +6,11 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "Gun.h"
+#include "HealthComponent.h"
 #include "EnhancedInputSubsystems.h"
 
 #include "Net/UnrealNetwork.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMainCharacter::AMainCharacter()
@@ -16,6 +18,7 @@ AMainCharacter::AMainCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
+
 
 	// Create a Spring Arm Component
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
@@ -28,6 +31,9 @@ AMainCharacter::AMainCharacter()
 
 	//Attach CameraComponent as a child of Spring Arm
 	TPSCameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
+
+	// Create a health component.
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 
 	CharacterMovement = GetCharacterMovement();
 }
@@ -72,6 +78,13 @@ void AMainCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+}
+
+void AMainCharacter::BeginDestroy()
+{
+	Super::BeginDestroy();
+
+	//Gun->Destroy();
 }
 
 bool AMainCharacter::IsJumping()
@@ -148,6 +161,11 @@ void AMainCharacter::Jumping()
 
 void AMainCharacter::Shoot()
 {
+	ShootRPC();
+}
+
+void AMainCharacter::ShootRPC_Implementation()
+{
 	FHitResult Hit;
 
 	FVector TraceBegin = TPSCameraComponent->GetComponentLocation();
@@ -158,11 +176,9 @@ void AMainCharacter::Shoot()
 
 	GetWorld()->LineTraceSingleByChannel(Hit, TraceBegin, TraceEnd, TraceChannelProperty, QueryParams);
 
-	
-	DrawDebugLine(GetWorld(), TraceBegin, Hit.bBlockingHit ? Hit.ImpactPoint : TraceEnd, Hit.bBlockingHit ? FColor::Blue : FColor::Red, false, 5.1f, 0, 1.0f);
-
 	if (!Hit.bBlockingHit || !IsValid(Hit.GetActor()))
 	{
+		DrawDebugLine(GetWorld(), TraceBegin, TraceEnd, FColor::Red, false, 5.1f, 0, 1.0f);
 		UE_LOG(LogTemp, Log, TEXT("No Actors Hit"));
 		return;
 	}
@@ -170,6 +186,12 @@ void AMainCharacter::Shoot()
 	if (AMainCharacter* other = Cast<AMainCharacter>(Hit.GetActor()))
 	{
 		UE_LOG(LogTemp, Log, TEXT("Trace hit player: %s"), *Hit.GetActor()->GetName());
+		DrawDebugLine(GetWorld(), TraceBegin, Hit.ImpactPoint, FColor::Blue, false, 5.1f, 0, 1.0f);
+		other->HealthComponent->UpdateHealth(-Gun->DamageAmount);
+	}
+	else
+	{
+		DrawDebugLine(GetWorld(), TraceBegin, Hit.ImpactPoint, FColor::Red, false, 5.1f, 0, 1.0f);
 	}
 }
 
