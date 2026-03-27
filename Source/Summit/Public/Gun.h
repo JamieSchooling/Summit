@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Gun.generated.h"
 
+class UCameraComponent;
+
 UCLASS()
 class SUMMIT_API AGun : public AActor
 {
@@ -23,8 +25,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void Shoot(UCameraComponent* Camera);
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	USceneComponent* SecondHandPin;
+
+	UPROPERTY(EditAnywhere, Category = "Default")
+	TEnumAsByte<ECollisionChannel> TraceChannelProperty = ECC_Pawn;
 
 	UPROPERTY(EditAnywhere)
 	float DamageAmount = 10.0f;

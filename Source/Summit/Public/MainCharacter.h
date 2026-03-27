@@ -64,9 +64,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
 	AGun* Gun;
 
-	UPROPERTY(EditAnywhere, Category = "Weapon")
-	TEnumAsByte<ECollisionChannel> TraceChannelProperty = ECC_Pawn;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -166,33 +166,7 @@ void AMainCharacter::Shoot()
 
 void AMainCharacter::ShootRPC_Implementation()
 {
-	FHitResult Hit;
-
-	FVector TraceBegin = TPSCameraComponent->GetComponentLocation();
-	FVector TraceEnd = TPSCameraComponent->GetComponentLocation() + TPSCameraComponent->GetForwardVector() * 10000.0f;
-
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(this);
-
-	GetWorld()->LineTraceSingleByChannel(Hit, TraceBegin, TraceEnd, TraceChannelProperty, QueryParams);
-
-	if (!Hit.bBlockingHit || !IsValid(Hit.GetActor()))
-	{
-		DrawDebugLine(GetWorld(), TraceBegin, TraceEnd, FColor::Red, false, 5.1f, 0, 1.0f);
-		UE_LOG(LogTemp, Log, TEXT("No Actors Hit"));
-		return;
-	}
-
-	if (AMainCharacter* other = Cast<AMainCharacter>(Hit.GetActor()))
-	{
-		UE_LOG(LogTemp, Log, TEXT("Trace hit player: %s"), *Hit.GetActor()->GetName());
-		DrawDebugLine(GetWorld(), TraceBegin, Hit.ImpactPoint, FColor::Blue, false, 5.1f, 0, 1.0f);
-		other->HealthComponent->UpdateHealthRPC(-Gun->DamageAmount);
-	}
-	else
-	{
-		DrawDebugLine(GetWorld(), TraceBegin, Hit.ImpactPoint, FColor::Red, false, 5.1f, 0, 1.0f);
-	}
+	Gun->Shoot(TPSCameraComponent);
 }
 
 void AMainCharacter::Landed(const FHitResult& Hit)
