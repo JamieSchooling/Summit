@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "HealthComponent.h"
 #include "MainCharacter.h"
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 AGun::AGun()
@@ -28,6 +29,7 @@ void AGun::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	ShotCooldownTime = 1.0f / FireRate;
 }
 
 // Called every frame
@@ -39,6 +41,12 @@ void AGun::Tick(float DeltaTime)
 
 void AGun::Shoot(UCameraComponent* Camera)
 {
+	float shotTime = UGameplayStatics::GetTimeSeconds(this);
+	if (shotTime - LastShotTime < ShotCooldownTime)
+	{
+		return;
+	}
+
 	FHitResult Hit;
 
 	FVector TraceBegin = Camera->GetComponentLocation();
@@ -66,5 +74,7 @@ void AGun::Shoot(UCameraComponent* Camera)
 	{
 		DrawDebugLine(GetWorld(), TraceBegin, Hit.ImpactPoint, FColor::Red, false, 5.1f, 0, 1.0f);
 	}
+
+	LastShotTime = shotTime;
 }
 

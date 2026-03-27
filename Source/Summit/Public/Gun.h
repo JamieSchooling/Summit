@@ -36,10 +36,16 @@ public:
 	UPROPERTY(EditAnywhere)
 	float DamageAmount = 10.0f;
 
+	UPROPERTY(EditAnywhere)
+	float FireRate = 2.0f;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* Mesh;
+
+	float ShotCooldownTime;
+	float LastShotTime = 0.0f;
 };
