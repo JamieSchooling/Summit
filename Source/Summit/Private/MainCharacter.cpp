@@ -187,9 +187,7 @@ void AMainCharacter::Server_Shoot_Implementation()
 }
 
 void AMainCharacter::Server_HandleDeath_Implementation()
-{	
-	GEngine->AddOnScreenDebugMessage(-1, 2.5f, FColor::Orange, FString::Printf(TEXT("Handling Death")));
-
+{
 	GetWorld()->GetTimerManager().SetTimer(
 		RespawnTimerHandle,
 		this,
@@ -203,21 +201,14 @@ void AMainCharacter::Respawn_ServerFunc()
 {
 	check(HasAuthority())
 
-	GEngine->AddOnScreenDebugMessage(-1, 2.5f, FColor::Orange, FString::Printf(TEXT("Attempting Respawn")));
 	if (AController* c = GetController())
 	{
 		c->UnPossess();
-		GEngine->AddOnScreenDebugMessage(-1, 2.5f, FColor::Orange, FString::Printf(TEXT("Got Controller for Respawn")));
 		// Let the GameMode spawn a new pawn
 		if (ATPSGameMode* GM = GetWorld()->GetAuthGameMode<ATPSGameMode>())
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 2.5f, FColor::Orange, FString::Printf(TEXT("Found Game Mode")));
 			GM->Server_Respawn(c);
 		}
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.5f, FColor::Orange, FString::Printf(TEXT("Couldn't get Controller for Respawn")));
 	}
 
 	Destroy();
