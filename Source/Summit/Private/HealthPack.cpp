@@ -42,7 +42,7 @@ void AHealthPack::NotifyActorBeginOverlap(AActor* OtherActor)
 		GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Green, FString::Printf(TEXT("Entered Health Pack")));
 
 		PlayerToHeal = player;
-		HealRPC();
+		Server_Heal();
 	}
 }
 
@@ -53,7 +53,7 @@ void AHealthPack::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(AHealthPack, PlayerToHeal);
 }
 
-void AHealthPack::HealRPC_Implementation()
+void AHealthPack::Server_Heal_Implementation()
 {
 	if (PlayerToHeal == nullptr)
 	{
@@ -67,7 +67,7 @@ void AHealthPack::HealRPC_Implementation()
 		return;
 	}
 
-	PlayerToHeal->HealthComponent->UpdateHealthRPC(HealAmount);
+	PlayerToHeal->HealthComponent->Server_UpdateHealth(HealAmount);
 
 	LastHealTime = time;
 	PlayerToHeal = nullptr;

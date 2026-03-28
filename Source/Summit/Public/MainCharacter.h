@@ -93,7 +93,7 @@ public:
 
 	/** Performs shoot on the server */
 	UFUNCTION(Server, Reliable)
-	void ShootRPC();
+	void Server_Shoot();
 
 	virtual void Landed(const FHitResult& Hit) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

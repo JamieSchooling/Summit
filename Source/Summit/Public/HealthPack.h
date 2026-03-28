@@ -42,7 +42,7 @@ private:
 	UStaticMeshComponent* Mesh;
 
 	UFUNCTION(Server, Reliable)
-	void HealRPC();
+	void Server_Heal();
 
 	float LastHealTime = 0.0f;
 

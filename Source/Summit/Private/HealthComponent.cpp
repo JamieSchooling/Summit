@@ -19,17 +19,17 @@ float UHealthComponent::GetMaxHealth() const
 	return MaxHealth;
 }
 
-void UHealthComponent::UpdateHealthRPC_Implementation(float deltaHealth)
+void UHealthComponent::Server_UpdateHealth_Implementation(float deltaHealth)
 {
 	Health += deltaHealth;
 
 	Health = FMath::Clamp(Health, 0.0f, MaxHealth);
 
-	NotifyHealthChangedRPC(Health);
+	Multicast_NotifyHealthChanged(Health);
 
 	if (Health == 0.0f)
 	{
-		NotifyHealthDepletedRPC();
+		Multicast_NotifyHealthDepleted();
 	}
 }
 
@@ -42,12 +42,12 @@ void UHealthComponent::BeginPlay()
 	Health = MaxHealth;
 }
 
-void UHealthComponent::NotifyHealthChangedRPC_Implementation(float newHealth)
+void UHealthComponent::Multicast_NotifyHealthChanged_Implementation(float newHealth)
 {
 	OnHealthChanged.Broadcast(newHealth, MaxHealth);
 }
 
-void UHealthComponent::NotifyHealthDepletedRPC_Implementation()
+void UHealthComponent::Multicast_NotifyHealthDepleted_Implementation()
 {
 	OnHealthDepleted.Broadcast();
 }

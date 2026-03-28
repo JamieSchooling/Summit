@@ -30,7 +30,7 @@ public:
 	float GetMaxHealth() const;
 
 	UFUNCTION(Server, Reliable)
-	void UpdateHealthRPC(float deltaHealth);
+	void Server_UpdateHealth(float deltaHealth);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -43,10 +43,10 @@ private:
 	float MaxHealth = 100.0f;
 
 	UFUNCTION(NetMulticast, Reliable)
-	void NotifyHealthDepletedRPC();
+	void Multicast_NotifyHealthDepleted();
 
 	UFUNCTION(NetMulticast, Reliable)
-	void NotifyHealthChangedRPC(float newHealth);
+	void Multicast_NotifyHealthChanged(float newHealth);
 
 		
 };

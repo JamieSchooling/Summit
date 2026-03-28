@@ -161,10 +161,10 @@ void AMainCharacter::Jumping()
 
 void AMainCharacter::Shoot()
 {
-	ShootRPC();
+	Server_Shoot();
 }
 
-void AMainCharacter::ShootRPC_Implementation()
+void AMainCharacter::Server_Shoot_Implementation()
 {
 	Gun->Shoot(TPSCameraComponent);
 }
