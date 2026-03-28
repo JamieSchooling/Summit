@@ -177,7 +177,7 @@ void AMainCharacter::Shoot()
 
 void AMainCharacter::Server_Shoot_Implementation()
 {
-	Gun->Shoot_ServerOnly(TPSCameraComponent);
+	Gun->Shoot_ServerFunc(TPSCameraComponent);
 }
 
 void AMainCharacter::Landed(const FHitResult& Hit)

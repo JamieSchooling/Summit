@@ -25,7 +25,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void Shoot_ServerOnly(UCameraComponent* Camera);
+	void Shoot_ServerFunc(UCameraComponent* Camera);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	USceneComponent* SecondHandPin;

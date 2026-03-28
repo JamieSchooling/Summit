@@ -40,7 +40,7 @@ void AGun::Tick(float DeltaTime)
 
 }
 
-void AGun::Shoot_ServerOnly(UCameraComponent* Camera)
+void AGun::Shoot_ServerFunc(UCameraComponent* Camera)
 {
 	check(HasAuthority())
 
