@@ -64,6 +64,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
 	AGun* Gun;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Respawn")
+	float RespawnDelay = 3.0f;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -96,6 +99,10 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Server_Shoot();
 
+	UFUNCTION(Server, Reliable)
+	void Server_HandleDeath();
+	void Respawn_ServerFunc();
+
 	virtual void Landed(const FHitResult& Hit) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -103,4 +110,5 @@ private:
 	TObjectPtr<UCharacterMovementComponent> CharacterMovement;
 	UPROPERTY(Replicated)
 	bool bIsJumping = false;
+	FTimerHandle RespawnTimerHandle;
 };
