@@ -13,6 +13,7 @@ AGun::AGun()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
 
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	SetRootComponent(Root);
@@ -39,8 +40,10 @@ void AGun::Tick(float DeltaTime)
 
 }
 
-void AGun::Shoot(UCameraComponent* Camera)
+void AGun::Shoot_ServerOnly(UCameraComponent* Camera)
 {
+	check(HasAuthority())
+
 	float shotTime = UGameplayStatics::GetTimeSeconds(this);
 	if (shotTime - LastShotTime < ShotCooldownTime)
 	{
@@ -54,6 +57,7 @@ void AGun::Shoot(UCameraComponent* Camera)
 
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(this);
+	QueryParams.AddIgnoredActor(GetOwner());
 
 	GetWorld()->LineTraceSingleByChannel(Hit, TraceBegin, TraceEnd, TraceChannelProperty, QueryParams);
 
