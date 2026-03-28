@@ -50,6 +50,8 @@ void AGun::Shoot_ServerFunc(UCameraComponent* Camera)
 		return;
 	}
 
+	LastShotTime = shotTime;
+
 	FHitResult Hit;
 
 	FVector TraceBegin = Camera->GetComponentLocation();
@@ -78,7 +80,5 @@ void AGun::Shoot_ServerFunc(UCameraComponent* Camera)
 	{
 		DrawDebugLine(GetWorld(), TraceBegin, Hit.ImpactPoint, FColor::Red, false, 5.1f, 0, 1.0f);
 	}
-
-	LastShotTime = shotTime;
 }
 
