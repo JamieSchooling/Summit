@@ -19,7 +19,7 @@ float UHealthComponent::GetMaxHealth() const
 	return MaxHealth;
 }
 
-void UHealthComponent::Server_UpdateHealth_Implementation(float deltaHealth)
+void UHealthComponent::Server_UpdateHealth_Implementation(float deltaHealth, AActor* source)
 {
 	Health += deltaHealth;
 
@@ -29,7 +29,7 @@ void UHealthComponent::Server_UpdateHealth_Implementation(float deltaHealth)
 
 	if (Health == 0.0f)
 	{
-		Multicast_NotifyHealthDepleted();
+		Multicast_NotifyHealthDepleted(source);
 	}
 }
 
@@ -47,8 +47,8 @@ void UHealthComponent::Multicast_NotifyHealthChanged_Implementation(float newHea
 	OnHealthChanged.Broadcast(newHealth, MaxHealth);
 }
 
-void UHealthComponent::Multicast_NotifyHealthDepleted_Implementation()
+void UHealthComponent::Multicast_NotifyHealthDepleted_Implementation(AActor* source)
 {
-	OnHealthDepleted.Broadcast();
+	OnHealthDepleted.Broadcast(source);
 }
 

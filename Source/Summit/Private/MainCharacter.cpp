@@ -9,6 +9,7 @@
 #include "HealthComponent.h"
 #include "EnhancedInputSubsystems.h"
 
+#include "MainPlayerState.h"
 #include "Net/UnrealNetwork.h"
 #include "Kismet/GameplayStatics.h"
 #include <TPSGameMode.h>
@@ -186,8 +187,23 @@ void AMainCharacter::Server_Shoot_Implementation()
 	Gun->Shoot_ServerFunc(TPSCameraComponent);
 }
 
-void AMainCharacter::Server_HandleDeath_Implementation()
+void AMainCharacter::Server_HandleDeath_Implementation(AActor* Killer)
 {
+	// Update victim
+	if (AMainPlayerState* VictimState = GetPlayerState<AMainPlayerState>())
+	{
+		VictimState->AddDeath();
+	}
+
+	if (AMainCharacter* KillerC = Cast<AMainCharacter>(Killer))
+	{
+		// Update killer
+		if (AMainPlayerState* KillerState = KillerC ? KillerC->GetPlayerState<AMainPlayerState>() : nullptr)
+		{
+			KillerState->AddKill();
+		}
+	}
+
 	GetWorld()->GetTimerManager().SetTimer(
 		RespawnTimerHandle,
 		this,

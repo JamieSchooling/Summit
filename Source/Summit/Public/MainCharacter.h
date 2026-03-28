@@ -100,7 +100,7 @@ public:
 	void Server_Shoot();
 
 	UFUNCTION(Server, Reliable)
-	void Server_HandleDeath();
+	void Server_HandleDeath(AActor* Killer);
 	void Respawn_ServerFunc();
 
 	virtual void Landed(const FHitResult& Hit) override;

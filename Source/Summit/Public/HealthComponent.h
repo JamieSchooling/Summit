@@ -6,7 +6,10 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHealthDepletedSignature);
+class AMainCharacter;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthDepletedSignature, AActor*, killer);
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChangedSignature, float, NewHealth, float, MaxHealth);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -30,7 +33,7 @@ public:
 	float GetMaxHealth() const;
 
 	UFUNCTION(Server, Reliable)
-	void Server_UpdateHealth(float deltaHealth);
+	void Server_UpdateHealth(float deltaHealth, AActor* source);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -43,7 +46,7 @@ private:
 	float MaxHealth = 100.0f;
 
 	UFUNCTION(NetMulticast, Reliable)
-	void Multicast_NotifyHealthDepleted();
+	void Multicast_NotifyHealthDepleted(AActor* source);
 
 	UFUNCTION(NetMulticast, Reliable)
 	void Multicast_NotifyHealthChanged(float newHealth);

@@ -67,7 +67,7 @@ void AHealthPack::Server_Heal_Implementation()
 		return;
 	}
 
-	PlayerToHeal->HealthComponent->Server_UpdateHealth(HealAmount);
+	PlayerToHeal->HealthComponent->Server_UpdateHealth(HealAmount, this);
 
 	LastHealTime = time;
 	PlayerToHeal = nullptr;
