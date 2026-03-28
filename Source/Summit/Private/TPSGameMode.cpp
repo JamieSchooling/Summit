@@ -2,6 +2,8 @@
 
 
 #include "TPSGameMode.h"
+#include <Kismet/GameplayStatics.h>
+#include <GameFramework/PlayerStart.h>
 
 void ATPSGameMode::Server_Respawn_Implementation(AController* PlayerController)
 {
@@ -13,4 +15,18 @@ void ATPSGameMode::Server_Respawn_Implementation(AController* PlayerController)
 
     APawn* NewPawn = GetWorld()->SpawnActor<APawn>(DefaultPawnClass, SpawnLocation, SpawnRotation);
     PlayerController->Possess(NewPawn);
+}
+
+AActor* ATPSGameMode::ChoosePlayerStart_Implementation(AController* Player)
+{
+    TArray<AActor*> PlayerStarts;
+    UGameplayStatics::GetAllActorsOfClass(this, APlayerStart::StaticClass(), PlayerStarts);
+
+    if (PlayerStarts.Num() > 0)
+    {
+        int32 Index = FMath::RandRange(0, PlayerStarts.Num() - 1);
+        return PlayerStarts[Index];
+    }
+
+    return Super::ChoosePlayerStart_Implementation(Player);
 }

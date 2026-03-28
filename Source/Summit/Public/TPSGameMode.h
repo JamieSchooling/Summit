@@ -17,4 +17,6 @@ class SUMMIT_API ATPSGameMode : public AGameModeBase
 public:
 	UFUNCTION(Server, Reliable)
 	void Server_Respawn(AController* PlayerController);
+
+	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 };
