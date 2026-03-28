@@ -42,33 +42,6 @@ AMainCharacter::AMainCharacter()
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	if (SpringArmComponent != nullptr)
-	{
-		//Set Location and Rotation
-		SpringArmComponent->SetRelativeLocation(FVector(0.0f, CameraOffset.Y, CameraOffset.Z));
-		SpringArmComponent->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
-
-		// Set How far away from character
-		SpringArmComponent->TargetArmLength = CameraOffset.X;
-
-		// Set camera lag behaviour
-		SpringArmComponent->bEnableCameraLag = true;
-		SpringArmComponent->bUsePawnControlRotation = true;
-		SpringArmComponent->CameraLagSpeed = CameraLagSpeed;
-	}
-
-	if (TPSCameraComponent != nullptr)
-	{
-		// Camera pawn rotation must be enabled to allow player to move camera
-		TPSCameraComponent->bUsePawnControlRotation = true;
-	}
-
-	//Gun Code
-	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
-	Gun->AttachToComponent(GetMesh(),
-		FAttachmentTransformRules::KeepRelativeTransform, TEXT("GunSocket"));
-	Gun->SetOwner(this);
 
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
@@ -85,6 +58,44 @@ void AMainCharacter::BeginDestroy()
 	Super::BeginDestroy();
 
 	//Gun->Destroy();
+}
+
+void AMainCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	// TODO: Use PostInitializeComponents, then if doesn't work:
+	// Try adding delay to see if that fixes standalone
+
+	if (SpringArmComponent)
+	{
+		//Set Location and Rotation
+		SpringArmComponent->SetRelativeLocation(FVector(0.0f, CameraOffset.Y, CameraOffset.Z));
+		SpringArmComponent->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+
+		// Set How far away from character
+		SpringArmComponent->TargetArmLength = CameraOffset.X;
+
+		// Set camera lag behaviour
+		SpringArmComponent->bEnableCameraLag = true;
+		SpringArmComponent->bUsePawnControlRotation = true;
+		SpringArmComponent->CameraLagSpeed = CameraLagSpeed;
+	}
+
+	if (TPSCameraComponent)
+	{
+		// Camera pawn rotation must be enabled to allow player to move camera
+		TPSCameraComponent->bUsePawnControlRotation = true;
+	}
+
+	if (GunClass) 
+	{
+		//Gun Code
+		Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+		Gun->AttachToComponent(GetMesh(),
+			FAttachmentTransformRules::KeepRelativeTransform, TEXT("GunSocket"));
+		Gun->SetOwner(this);
+	}
 }
 
 bool AMainCharacter::IsJumping()
